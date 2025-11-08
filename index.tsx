@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Brain, Cpu, Utensils, GraduationCap, MessageSquare, BarChart, ChevronRight, Menu, X, ExternalLink, Send, Smartphone, Mail } from 'lucide-react';
+import { Brain, Cpu, Utensils, GraduationCap, MessageSquare, BarChart, ChevronRight, Menu, X, ExternalLink, Send, Smartphone, Mail, Code, Search, Rocket, Activity } from 'lucide-react';
 
 const THEME = {
   primary: '#00FF99',
@@ -43,9 +43,13 @@ const styles = `
   .neon-border {
     box-shadow: 0 0 5px var(--primary), inset 0 0 5px var(--primary);
   }
+  .neon-box {
+    transition: all 0.3s ease;
+  }
   .neon-box:hover {
     box-shadow: 0 0 15px var(--primary);
-    border-color: var(--primary);
+    border-color: var(--primary) !important;
+    transform: translateY(-5px);
   }
 
   .container {
@@ -83,8 +87,10 @@ const styles = `
     overflow: hidden;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
     text-decoration: none;
+    font-size: 0.9rem;
   }
   .btn-primary {
     background: var(--primary);
@@ -109,12 +115,25 @@ const styles = `
     background-size: 30px 30px;
     z-index: 0;
     opacity: 0.3;
+    pointer-events: none;
   }
 
   /* Portfolio Image Hover */
   .portfolio-card:hover .portfolio-img {
     transform: scale(1.1);
     opacity: 1 !important;
+  }
+
+  /* Process Steps */
+  .step-number {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3rem;
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--primary);
+    opacity: 0.5;
+    line-height: 1;
+    margin-bottom: 1rem;
   }
 `;
 
@@ -134,6 +153,7 @@ const Navbar = () => {
     { name: 'Início', href: '#hero' },
     { name: 'Sobre', href: '#about' },
     { name: 'Soluções', href: '#solutions' },
+    { name: 'Processo', href: '#process' },
     { name: 'Portfólio', href: '#portfolio' },
     { name: 'Contato', href: '#contact' },
   ];
@@ -145,7 +165,7 @@ const Navbar = () => {
     const element = document.getElementById(targetId);
     
     if (element) {
-      const headerOffset = 100;
+      const headerOffset = 80;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -182,14 +202,14 @@ const Navbar = () => {
         </a>
 
         {/* Desktop Nav */}
-        <div style={{ display: window.innerWidth > 768 ? 'flex' : 'none', gap: '30px' }} className="desktop-nav">
+        <div style={{ display: window.innerWidth > 960 ? 'flex' : 'none', gap: '25px' }} className="desktop-nav">
           {navLinks.map(link => (
             <a 
               key={link.name} 
               href={link.href} 
               onClick={(e) => handleNavClick(e, link.href)}
               style={{ 
-                color: 'white', textDecoration: 'none', fontWeight: 500, fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px', transition: 'color 0.3s', cursor: 'pointer' 
+                color: 'white', textDecoration: 'none', fontWeight: 500, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px', transition: 'color 0.3s', cursor: 'pointer' 
               }}
               onMouseOver={(e) => e.currentTarget.style.color = THEME.primary}
               onMouseOut={(e) => e.currentTarget.style.color = 'white'}
@@ -200,7 +220,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Nav Toggle */}
-        <div className="mobile-toggle" style={{ display: window.innerWidth <= 768 ? 'block' : 'none' }}>
+        <div className="mobile-toggle" style={{ display: window.innerWidth <= 960 ? 'block' : 'none' }}>
           <button onClick={() => setIsOpen(!isOpen)} style={{ background: 'none', border: 'none', color: THEME.primary, cursor: 'pointer' }}>
             {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
@@ -210,18 +230,19 @@ const Navbar = () => {
       {/* Mobile Nav Menu */}
       {isOpen && (
         <div style={{
-          position: 'absolute',
-          top: '100%',
+          position: 'fixed',
+          top: '70px',
           left: 0,
           width: '100%',
+          height: 'calc(100vh - 70px)',
           backgroundColor: THEME.bgAlt,
           padding: '20px 0',
-          borderBottom: `2px solid ${THEME.primary}`,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: '20px',
-          boxShadow: '0 10px 20px rgba(0,0,0,0.5)'
+          overflowY: 'auto',
+          zIndex: 999
         }}>
           {navLinks.map(link => (
             <a 
@@ -229,7 +250,7 @@ const Navbar = () => {
               href={link.href} 
               onClick={(e) => handleNavClick(e, link.href)}
               style={{ 
-                color: 'white', textDecoration: 'none', fontSize: '1.1rem', textTransform: 'uppercase', padding: '10px', width: '100%', textAlign: 'center', cursor: 'pointer'
+                color: 'white', textDecoration: 'none', fontSize: '1.2rem', textTransform: 'uppercase', padding: '15px', width: '80%', textAlign: 'center', cursor: 'pointer', borderBottom: `1px solid ${THEME.primary}22`
               }}
             >
               {link.name}
@@ -246,7 +267,7 @@ const Hero = () => {
     e.preventDefault();
     const element = document.querySelector(id);
     if (element) {
-        const headerOffset = 100;
+        const headerOffset = 80;
         const elementPosition = element.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
         window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
@@ -255,7 +276,7 @@ const Hero = () => {
 
   return (
     <section id="hero" style={{ 
-      minHeight: '100vh', 
+      minHeight: '90vh', 
       display: 'flex', 
       alignItems: 'center', 
       position: 'relative',
@@ -263,7 +284,6 @@ const Hero = () => {
       overflow: 'hidden'
     }}>
       <div className="tech-grid"></div>
-      {/* Radial gradient overlay for depth */}
       <div style={{
         position: 'absolute',
         top: '50%', left: '50%',
@@ -275,36 +295,59 @@ const Hero = () => {
       }}></div>
 
       <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-        <div style={{ maxWidth: '800px' }} className="animate-fade-in">
+        <div style={{ maxWidth: '850px' }} className="animate-fade-in">
           <h1 className="font-orbitron neon-text" style={{ 
-            fontSize: 'clamp(2.5rem, 8vw, 5rem)', 
+            fontSize: 'clamp(2.2rem, 6vw, 4.5rem)', 
             lineHeight: 1.1, 
-            marginBottom: '20px',
+            marginBottom: '25px',
             color: 'white'
           }}>
-            TRANSFORME SEU NEGÓCIO COM <span style={{ color: THEME.primary }}>INTELIGÊNCIA ARTIFICIAL</span>
+            INTELIGÊNCIA ARTIFICIAL APLICADA À <span style={{ color: THEME.primary }}>SUA REALIDADE</span>.
           </h1>
           <p style={{ 
-            fontSize: 'clamp(1.1rem, 2vw, 1.5rem)', 
+            fontSize: 'clamp(1.1rem, 2vw, 1.4rem)', 
             color: THEME.textMuted, 
             marginBottom: '40px',
-            maxWidth: '600px'
+            maxWidth: '700px'
           }}>
-            Automatizamos cardápios, atendimentos e rotinas educacionais com Inteligência Artificial.
-            Da hamburgueria de bairro ao professor em sala de aula, a RR Solutions IA transforma processos
-            manuais em experiências inteligentes.
+            Automatizamos processos, criamos experiências digitais e usamos IA para aumentar resultados em pequenos e médios negócios.
           </p>
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-            <a href="https://wa.me/5511947077276?text=Olá,%20gostaria%20de%20saber%20mais%20sobre%20as%20soluções%20da%20RR%20Solutions%20IA." target="_blank" rel="noopener noreferrer" className="btn btn-primary">
-              Fale com a equipe <MessageSquare size={18} />
+            <a href="#contact" onClick={(e) => handleScrollTo(e, '#contact')} className="btn btn-primary">
+              Quero implementar IA no meu negócio <Rocket size={18} />
             </a>
             <a href="#portfolio" onClick={(e) => handleScrollTo(e, '#portfolio')} className="btn">
-              Ver Portfólio <ChevronRight size={18} />
+              Ver projetos já entregues <ChevronRight size={18} />
             </a>
           </div>
         </div>
       </div>
     </section>
+  );
+};
+
+const TrustBanner = () => {
+  return (
+    <div style={{ 
+      backgroundColor: THEME.primary, 
+      padding: '25px 0', 
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
+      <div className="container" style={{ textAlign: 'center' }}>
+        <p style={{ 
+          color: THEME.bg, 
+          fontSize: 'clamp(1rem, 2.5vw, 1.3rem)', 
+          fontWeight: 700,
+          fontFamily: 'Orbitron, sans-serif',
+          textTransform: 'uppercase',
+          letterSpacing: '1px',
+          margin: 0
+        }}>
+          Aplicamos IA em restaurantes, hamburguerias e educação, com soluções sob medida para cada negócio.
+        </p>
+      </div>
+    </div>
   );
 };
 
@@ -315,35 +358,28 @@ const About = () => {
         <div className="grid-responsive" style={{ alignItems: 'center', gap: '4rem' }}>
           <div>
             <h2 className="font-orbitron neon-text" style={{ fontSize: '2.5rem', marginBottom: '1.5rem', color: 'white' }}>
-              NOSSA MISSÃO
+              SOBRE A <span style={{ color: THEME.primary }}>RR SOLUTIONS IA</span>
             </h2>
-            <p style={{ fontSize: '1.1rem', marginBottom: '1.5rem', color: THEME.textMuted }}>
-              Fundada em 2023, a <strong>RR Solutions IA</strong> nasceu com a missão de levar Inteligência
-              Artificial para a realidade de pequenos e médios negócios. Começamos desenvolvendo soluções para
-              hamburguerias e escolas, e hoje atuamos como um <strong>estúdio tecnológico</strong> com
-              <strong> squad de devs especializados em IA aplicada</strong>, criando produtos sob medida
-              que geram resultado de verdade.
-            </p>
-            <div style={{ 
-              display: 'inline-block', 
-              padding: '15px 25px', 
-              borderLeft: `4px solid ${THEME.primary}`,
-              backgroundColor: `${THEME.primary}10`,
-              marginTop: '20px'
-             }}>
-              <p className="font-orbitron" style={{ color: 'white', fontWeight: 700, fontSize: '1.2rem' }}>
-                "Inteligência Artificial aplicada à sua realidade."
+            <div style={{ color: THEME.textMuted, fontSize: '1.1rem', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <p>
+                A <strong>RR Solutions IA</strong> é um estúdio tecnológico fundado em 2023, especializado em criar soluções de Inteligência Artificial para negócios reais.
+              </p>
+              <p>
+                Começamos automatizando processos de hamburguerias e desenvolvendo ferramentas educacionais para professores, e hoje atuamos como uma <strong>squad de devs e criadores</strong> focada em transformar ideias em produtos digitais inteligentes – do primeiro protótipo ao sistema em produção.
+              </p>
+              <p>
+                Nossa missão é democratizar o acesso à IA, falando a língua do empreendedor e entregando soluções que geram resultado, não apenas conceitos técnicos.
               </p>
             </div>
           </div>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <div style={{
+             <div style={{
               position: 'relative',
               width: '100%',
               maxWidth: '400px',
               aspectRatio: '1/1',
               borderRadius: '20px',
-              background: `linear-gradient(45deg, ${THEME.bg}, ${THEME.bgAlt})`,
+              background: `linear-gradient(135deg, ${THEME.bgAlt}, ${THEME.bg})`,
               border: `1px solid ${THEME.primary}33`,
               display: 'flex',
               alignItems: 'center',
@@ -351,7 +387,7 @@ const About = () => {
               overflow: 'hidden'
             }}>
               <div className="tech-grid" style={{opacity: 0.5}}></div>
-              <Cpu size={120} color={THEME.primary} style={{ opacity: 0.8, filter: 'drop-shadow(0 0 20px rgba(0,255,153,0.4))' }} />
+              <Brain size={140} color={THEME.primary} style={{ opacity: 0.9, filter: 'drop-shadow(0 0 30px rgba(0,255,153,0.3))' }} />
             </div>
           </div>
         </div>
@@ -361,26 +397,26 @@ const About = () => {
 };
 
 const Solutions = () => {
-  const solutions = [
+  const solutionsData = [
     {
-      icon: <Utensils size={40} color={THEME.primary} />,
-      title: "IA para Alimentação",
-      desc: "Cardápios digitais inteligentes, automação de pedidos e previsão de demanda para restaurantes e deliveries."
+      icon: <Utensils size={32} color={THEME.bg} />,
+      title: "IA para Restaurantes",
+      desc: "Automatização de pedidos, cardápios digitais, integração com WhatsApp e sites de delivery. Reduza erros e ganhe velocidade."
     },
     {
-      icon: <GraduationCap size={40} color={THEME.primary} />,
+      icon: <GraduationCap size={32} color={THEME.bg} />,
       title: "IA na Educação",
-      desc: "Ferramentas que auxiliam professores na criação de avaliações, planos de aula adaptativos e inclusão escolar."
+      desc: "SaaS que cria e corrige avaliações, gera slides e adapta conteúdos para alunos com necessidades especiais."
     },
     {
-      icon: <MessageSquare size={40} color={THEME.primary} />,
-      title: "Chatbots & Automação",
-      desc: "Atendimento ao cliente 24/7 e automação de processos comerciais repetitivos para liberar sua equipe."
+      icon: <MessageSquare size={32} color={THEME.bg} />,
+      title: "Chatbots Inteligentes",
+      desc: "Atendimento 24/7, agendamentos e suporte integrados às ferramentas que você já utiliza."
     },
     {
-      icon: <BarChart size={40} color={THEME.primary} />,
-      title: "Análise de Dados",
-      desc: "Transforme dados brutos em insights estratégicos com relatórios inteligentes gerados por IA."
+      icon: <Code size={32} color={THEME.bg} />,
+      title: "Soluções Sob Medida",
+      desc: "Desenvolvemos aplicações personalizadas com IA, conectadas exatamente ao seu fluxo atual de trabalho."
     }
   ];
 
@@ -389,34 +425,94 @@ const Solutions = () => {
       <div className="container">
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
           <h2 className="font-orbitron" style={{ fontSize: '2.5rem', color: 'white', marginBottom: '10px' }}>
-            SOLUÇÕES <span className="neon-text" style={{ color: THEME.primary }}>INTELIGENTES</span>
+            SOLUÇÕES EM <span className="neon-text" style={{ color: THEME.primary }}>IA</span>
           </h2>
-          <p style={{ color: THEME.textMuted, fontSize: '1.2rem' }}>Otimize seu tempo. Transforme dados em decisões.</p>
+          <p style={{ color: THEME.textMuted, fontSize: '1.2rem' }}>Tecnologia que resolve problemas reais.</p>
         </div>
 
         <div className="grid-responsive">
-          {solutions.map((sol, index) => (
+          {solutionsData.map((sol, index) => (
             <div key={index} className="neon-box" style={{
-              padding: '40px 30px',
+              padding: '35px 30px',
               backgroundColor: THEME.bgAlt,
               border: `1px solid ${THEME.primary}22`,
               borderRadius: '16px',
-              transition: 'all 0.3s ease',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'flex-start',
-              gap: '20px'
+              gap: '20px',
+              position: 'relative',
+              overflow: 'hidden'
             }}>
               <div style={{ 
-                padding: '15px', 
-                background: `${THEME.primary}15`, 
+                padding: '12px', 
+                background: THEME.primary, 
                 borderRadius: '12px',
-                marginBottom: '10px'
+                display: 'inline-flex'
               }}>
                 {sol.icon}
               </div>
-              <h3 className="font-orbitron" style={{ fontSize: '1.5rem', color: 'white' }}>{sol.title}</h3>
-              <p style={{ color: THEME.textMuted }}>{sol.desc}</p>
+              <h3 className="font-orbitron" style={{ fontSize: '1.4rem', color: 'white' }}>{sol.title}</h3>
+              <p style={{ color: THEME.textMuted, fontSize: '1rem' }}>{sol.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Process = () => {
+  const steps = [
+    {
+      icon: <Search size={24} color={THEME.primary} />,
+      title: "Diagnóstico",
+      desc: "Entendemos o seu negócio, suas dores e seus objetivos com IA."
+    },
+    {
+      icon: <Brain size={24} color={THEME.primary} />,
+      title: "Proposta de solução",
+      desc: "Desenhamos a melhor combinação entre app, automações e IA generativa para o seu contexto."
+    },
+    {
+      icon: <Code size={24} color={THEME.primary} />,
+      title: "Desenvolvimento",
+      desc: "Construímos, testamos e conectamos a solução às ferramentas que você já usa."
+    },
+    {
+      icon: <Activity size={24} color={THEME.primary} />,
+      title: "Acompanhamento",
+      desc: "Monitoramos o uso, ajustamos o que for necessário e sugerimos melhorias constantes."
+    }
+  ];
+
+  return (
+    <section id="process" style={{ backgroundColor: THEME.bgAlt, position: 'relative' }}>
+      <div className="tech-grid" style={{ opacity: 0.1 }}></div>
+      <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+          <h2 className="font-orbitron" style={{ fontSize: '2.5rem', color: 'white', marginBottom: '10px' }}>
+            COMO <span className="neon-text" style={{ color: THEME.primary }}>TRABALHAMOS</span>
+          </h2>
+          <p style={{ color: THEME.textMuted, fontSize: '1.2rem' }}>Do entendimento à evolução contínua.</p>
+        </div>
+
+        <div className="grid-responsive" style={{ gap: '30px' }}>
+          {steps.map((step, index) => (
+            <div key={index} style={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              padding: '30px', 
+              backgroundColor: THEME.bg,
+              border: `1px solid ${THEME.primary}22`,
+              borderRadius: '16px',
+              position: 'relative'
+            }}>
+              <span className="step-number">0{index + 1}</span>
+              <h3 className="font-orbitron" style={{ color: 'white', marginBottom: '15px', fontSize: '1.3rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                {step.title}
+              </h3>
+              <p style={{ color: THEME.textMuted }}>{step.desc}</p>
             </div>
           ))}
         </div>
@@ -436,38 +532,39 @@ const Portfolio = () => {
     {
       title: "ClickInBurguer",
       category: "Food Service",
-      desc: "Site moderno e responsivo para hamburgueria digital.",
+      desc: "Cardápio digital e experiência de pedido otimizada.",
       url: "https://clickinburger.netlify.app/",
     },
     {
       title: "Hamburgueria do Chefinho",
       category: "Food Service",
-      desc: "Presença digital completa para delivery e retirada.",
+      desc: "Site de delivery com foco em conversão pelo WhatsApp.",
       url: "https://hamburgueriadochefinho.netlify.app/",
     },
     {
       title: "Asats Burguer",
       category: "Food Service",
-      desc: "Design arrojado focado na conversão de pedidos.",
+      desc: "Presença digital com visual forte pronta para expansão.",
       url: "https://asatsburguer.netlify.app/",
     },
     {
       title: "Pato Rouco Burguer",
       category: "Food Service",
-      desc: "Identidade visual marcante e navegação intuitiva.",
+      desc: "Marca própria com fluxo de pedidos simplificado.",
       url: "https://patoroucoburguer.netlify.app/",
     }
   ];
 
   return (
-    <section id="portfolio" style={{ backgroundColor: THEME.bgAlt, position: 'relative' }}>
-      <div className="tech-grid" style={{ opacity: 0.1 }}></div>
-      <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+    <section id="portfolio">
+      <div className="container">
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-          <h2 className="font-orbitron neon-text" style={{ fontSize: '2.5rem', color: 'white', marginBottom: '10px' }}>
+          <h2 className="font-orbitron neon-text" style={{ fontSize: '2.5rem', color: 'white', marginBottom: '15px' }}>
             NOSSO PORTFÓLIO
           </h2>
-          <p style={{ color: THEME.textMuted, fontSize: '1.2rem' }}>Projetos reais que geram resultados reais.</p>
+          <p style={{ color: THEME.textMuted, fontSize: '1.2rem', maxWidth: '700px', margin: '0 auto' }}>
+            Alguns projetos que já ajudamos a tirar do papel com tecnologia e IA:
+          </p>
         </div>
 
         <div style={{ 
@@ -478,29 +575,24 @@ const Portfolio = () => {
           {projects.map((project, index) => (
             <a key={index} href={project.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
               <div className="neon-box portfolio-card" style={{
-                backgroundColor: THEME.bg,
+                backgroundColor: THEME.bgAlt,
                 borderRadius: '16px',
                 overflow: 'hidden',
                 height: '100%',
-                border: `1px solid ${THEME.primary}33`,
-                transition: 'all 0.4s ease',
+                border: `1px solid ${THEME.primary}22`,
                 display: 'flex',
                 flexDirection: 'column'
               }}>
-                {/* Optimized Image Area with Lazy Loading */}
                 <div style={{
-                  height: '200px',
+                  height: '220px',
                   position: 'relative',
                   overflow: 'hidden',
-                  backgroundColor: THEME.bgAlt // Placeholder background while loading
+                  backgroundColor: THEME.bg // Placeholder
                 }}>
                   <img 
                     src={`https://image.thum.io/get/width/800/crop/600/noanimate/${project.url}`}
                     alt={`Miniatura do site ${project.title}`}
-                    loading="lazy"     // Optimization: Defers loading of off-screen images
-                    decoding="async"   // Optimization: Allows page rendering to continue while image decodes
-                    width="800"        // Optimization: Prevents Cumulative Layout Shift (CLS)
-                    height="600"       // Optimization: Prevents Cumulative Layout Shift (CLS)
+                    loading="lazy"
                     className="portfolio-img"
                     style={{
                       width: '100%',
@@ -508,7 +600,7 @@ const Portfolio = () => {
                       objectFit: 'cover',
                       objectPosition: 'top center',
                       transition: 'transform 0.5s ease, opacity 0.5s ease',
-                      opacity: 0.9
+                      opacity: 0.85
                     }}
                   />
                    <div style={{ 
@@ -518,23 +610,25 @@ const Portfolio = () => {
                      background: 'rgba(0,0,0,0.7)', 
                      padding: '6px 12px', 
                      borderRadius: '20px', 
-                     fontSize: '0.8rem', 
+                     fontSize: '0.75rem', 
                      color: 'white', 
                      display: 'flex', 
                      alignItems: 'center', 
                      gap: '6px',
                      backdropFilter: 'blur(4px)',
-                     border: `1px solid ${THEME.primary}33`
+                     border: `1px solid ${THEME.primary}44`,
+                     textTransform: 'uppercase',
+                     fontWeight: 700
                    }}>
-                     <ExternalLink size={14} color={THEME.primary} /> Visitar
+                     <ExternalLink size={12} color={THEME.primary} /> Ver projeto
                    </div>
                 </div>
                 
                 <div style={{ padding: '25px', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                  <span style={{ color: THEME.primary, fontSize: '0.9rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>
+                  <span style={{ color: THEME.primary, fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>
                     {project.category}
                   </span>
-                  <h3 className="font-orbitron" style={{ color: 'white', marginBottom: '10px', fontSize: '1.4rem' }}>
+                  <h3 className="font-orbitron" style={{ color: 'white', marginBottom: '10px', fontSize: '1.3rem' }}>
                     {project.title}
                   </h3>
                   <p style={{ color: THEME.textMuted, fontSize: '0.95rem' }}>
@@ -551,109 +645,86 @@ const Portfolio = () => {
 };
 
 const Contact = () => {
-  const [phone, setPhone] = useState('');
-
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value;
-    value = value.replace(/\D/g, ""); // Remove non-digits
-    value = value.substring(0, 11); // Limit to 11 digits
-
-    // Progressive masking: (DD) 9XXXX-XXXX
-    if (value.length > 10) {
-      value = value.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
-    } else if (value.length > 6) {
-      value = value.replace(/^(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
-    } else if (value.length > 2) {
-      value = value.replace(/^(\d{2})(\d{0,5})/, "($1) $2");
-    } else if (value.length > 0) {
-       value = value.replace(/^(\d*)/, "($1");
-    }
-    
-    setPhone(value);
-  };
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const name = formData.get('name');
     const company = formData.get('company');
-    const phoneValue = formData.get('phone');
     const segment = formData.get('segment');
     const message = formData.get('message');
 
-    const whatsappMessage = `*Novo Lead via Site RR Solutions IA*%0A%0A*Nome:* ${name}%0A*Empresa:* ${company}%0A*WhatsApp:* ${phoneValue}%0A*Segmento:* ${segment}%0A*Mensagem:* ${message}`;
+    // Formatado para melhor leitura no WhatsApp
+    const whatsappMessage = 
+`*Novo Contato via Site RR Solutions IA* 🚀
+
+👤 *Nome:* ${name}
+🏢 *Empresa:* ${company}
+🎯 *Segmento:* ${segment}
+
+📝 *Mensagem / Desafio:*
+${message}`;
 
     window.open(`https://wa.me/5511947077276?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
-    
     e.currentTarget.reset();
-    setPhone(''); // Clear the controlled phone input state
   };
 
   return (
-    <section id="contact">
-      <div className="container">
+    <section id="contact" style={{ backgroundColor: THEME.bgAlt, position: 'relative' }}>
+      <div className="tech-grid" style={{ opacity: 0.1 }}></div>
+      <div className="container" style={{ position: 'relative', zIndex: 2 }}>
         <div className="grid-responsive" style={{ gap: '4rem', alignItems: 'center' }}>
           <div>
             <h2 className="font-orbitron" style={{ fontSize: '2.5rem', color: 'white', marginBottom: '20px' }}>
-              VAMOS <span className="neon-text" style={{ color: THEME.primary }}>INOVAR</span> JUNTOS?
+              COMO A IA PODE AJUDAR O <span className="neon-text" style={{ color: THEME.primary }}>SEU NEGÓCIO</span> HOJE?
             </h2>
-            <p style={{ fontSize: '1.2rem', color: THEME.textMuted, marginBottom: '40px' }}>
-              Descubra como nossas soluções de IA podem ser aplicadas especificamente para o seu modelo de negócio. Preencha o formulário e aguarde nosso contato.
+            <p style={{ fontSize: '1.2rem', color: THEME.textMuted, marginBottom: '30px' }}>
+              Conte pra gente qual é o seu desafio atual. Em até 24 horas, nossa equipe retorna com ideias e caminhos possíveis usando IA.
             </p>
             
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                <div style={{ background: `${THEME.primary}22`, padding: '12px', borderRadius: '50%' }}>
-                  <Smartphone color={THEME.primary} />
+                <div style={{ background: `${THEME.primary}22`, padding: '15px', borderRadius: '50%' }}>
+                  <Smartphone color={THEME.primary} size={24} />
                 </div>
                 <div>
-                  <p style={{ color: THEME.textMuted, fontSize: '0.9rem' }}>WhatsApp / Telefone</p>
-                  <p style={{ color: 'white', fontSize: '1.1rem', fontWeight: 500 }}>(11) 9 4707-7276</p>
+                  <p style={{ color: THEME.textMuted, fontSize: '0.9rem', marginBottom: '5px' }}>WhatsApp / Telefone</p>
+                  <a href="https://wa.me/5511947077276" target="_blank" rel="noopener noreferrer" style={{ color: 'white', fontSize: '1.2rem', fontWeight: 500, textDecoration: 'none' }}>
+                    (11) 9 4707-7276
+                  </a>
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                <div style={{ background: `${THEME.primary}22`, padding: '12px', borderRadius: '50%' }}>
-                  <Mail color={THEME.primary} />
+                <div style={{ background: `${THEME.primary}22`, padding: '15px', borderRadius: '50%' }}>
+                  <Mail color={THEME.primary} size={24} />
                 </div>
                 <div>
-                  <p style={{ color: THEME.textMuted, fontSize: '0.9rem' }}>E-mail</p>
-                  <p style={{ color: 'white', fontSize: '1.1rem', fontWeight: 500 }}>risso_rafa@hotmail.com</p>
+                  <p style={{ color: THEME.textMuted, fontSize: '0.9rem', marginBottom: '5px' }}>E-mail</p>
+                  <a href="mailto:risso_rafa@hotmail.com" style={{ color: 'white', fontSize: '1.2rem', fontWeight: 500, textDecoration: 'none' }}>
+                    risso_rafa@hotmail.com
+                  </a>
                 </div>
               </div>
             </div>
           </div>
 
           <div style={{ 
-            backgroundColor: THEME.bgAlt, 
+            backgroundColor: THEME.bg, 
             padding: '40px', 
             borderRadius: '20px', 
             border: `1px solid ${THEME.primary}33`,
-            boxShadow: `0 10px 40px -10px rgba(0,0,0,0.5)`
+            boxShadow: `0 20px 40px -10px rgba(0,0,0,0.5)`
           }}>
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div>
-                <label htmlFor="name" style={{ display: 'block', color: 'white', marginBottom: '8px', fontSize: '0.9rem' }}>Nome Completo</label>
+                <label htmlFor="name" style={labelStyle}>Nome Completo *</label>
                 <input type="text" id="name" name="name" required style={inputStyle} placeholder="Seu nome" />
               </div>
               <div>
-                <label htmlFor="company" style={{ display: 'block', color: 'white', marginBottom: '8px', fontSize: '0.9rem' }}>Empresa</label>
-                <input type="text" id="company" name="company" style={inputStyle} placeholder="Nome da sua empresa" />
+                <label htmlFor="company" style={labelStyle}>Empresa / Negócio *</label>
+                <input type="text" id="company" name="company" required style={inputStyle} placeholder="Nome da sua empresa" />
               </div>
               <div>
-                <label htmlFor="phone" style={{ display: 'block', color: 'white', marginBottom: '8px', fontSize: '0.9rem' }}>WhatsApp</label>
-                <input 
-                  type="tel" 
-                  id="phone" 
-                  name="phone" 
-                  required 
-                  style={inputStyle} 
-                  placeholder="(11) 90000-0000" 
-                  value={phone}
-                  onChange={handlePhoneChange}
-                />
-              </div>
-              <div>
-                <label htmlFor="segment" style={{ display: 'block', color: 'white', marginBottom: '8px', fontSize: '0.9rem' }}>Segmento do Negócio</label>
+                <label htmlFor="segment" style={labelStyle}>Segmento *</label>
                 <select id="segment" name="segment" required style={inputStyle}>
                   <option value="">Selecione...</option>
                   <option value="Alimentação / Restaurante">Alimentação / Restaurante</option>
@@ -664,11 +735,17 @@ const Contact = () => {
                 </select>
               </div>
               <div>
-                <label htmlFor="message" style={{ display: 'block', color: 'white', marginBottom: '8px', fontSize: '0.9rem' }}>Como a IA pode te ajudar?</label>
-                <textarea id="message" name="message" required style={{...inputStyle, minHeight: '100px', resize: 'vertical'}} placeholder="Descreva brevemente seu desafio..." ></textarea>
+                <label htmlFor="message" style={labelStyle}>Como você gostaria de usar IA? *</label>
+                <textarea 
+                  id="message" 
+                  name="message" 
+                  required 
+                  style={{...inputStyle, minHeight: '120px', resize: 'vertical'}} 
+                  placeholder="Ex.: automatizar pedidos pelo WhatsApp, criar um app para meus alunos..." 
+                ></textarea>
               </div>
-              <button type="submit" className="btn btn-primary" style={{ justifyContent: 'center', width: '100%', marginTop: '10px' }}>
-                Enviar via WhatsApp <Send size={18} />
+              <button type="submit" className="btn btn-primary" style={{ justifyContent: 'center', width: '100%', marginTop: '10px', fontSize: '1rem', padding: '15px' }}>
+                Solicitar avaliação gratuita <Send size={18} />
               </button>
             </form>
           </div>
@@ -678,10 +755,18 @@ const Contact = () => {
   );
 };
 
+const labelStyle = {
+  display: 'block', 
+  color: 'white', 
+  marginBottom: '8px', 
+  fontSize: '0.9rem',
+  fontWeight: 500
+};
+
 const inputStyle = {
   width: '100%',
-  padding: '12px 15px',
-  backgroundColor: THEME.bg,
+  padding: '14px 16px',
+  backgroundColor: THEME.bgAlt,
   border: `1px solid ${THEME.primary}44`,
   borderRadius: '8px',
   color: 'white',
@@ -693,19 +778,18 @@ const inputStyle = {
 
 const Footer = () => {
   return (
-    <footer style={{ backgroundColor: '#050507', padding: '50px 0 30px', borderTop: `1px solid ${THEME.primary}22` }}>
+    <footer style={{ backgroundColor: '#050507', padding: '40px 0', borderTop: `1px solid ${THEME.primary}22` }}>
       <div className="container">
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '20px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '25px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Brain color={THEME.primary} size={40} />
-            <span className="font-orbitron neon-text" style={{ fontSize: '1.8rem', fontWeight: 700, color: 'white' }}>
+            <Brain color={THEME.primary} size={36} />
+            <span className="font-orbitron neon-text" style={{ fontSize: '1.6rem', fontWeight: 700, color: 'white' }}>
               RR SOLUTIONS<span style={{ color: THEME.primary }}>.IA</span>
             </span>
           </div>
-          <p style={{ color: THEME.textMuted, maxWidth: '500px' }}>
-            Democratizando a inteligência artificial para impulsionar o seu sucesso.
-          </p>
-          <div style={{ width: '100%', height: '1px', backgroundColor: `${THEME.primary}22`, margin: '30px 0' }}></div>
+          
+          <div style={{ width: '100%', maxWidth: '300px', height: '1px', backgroundColor: `${THEME.primary}22` }}></div>
+          
           <p style={{ color: THEME.textMuted, fontSize: '0.9rem' }}>
             © 2025 RR Solutions IA – Todos os direitos reservados.
           </p>
@@ -727,21 +811,15 @@ const App = () => {
     };
   }, []);
 
-  // Simple responsive handler for JS-based styles if needed, though largely handled by CSS
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
   return (
     <div className="app">
       <Navbar />
       <main>
         <Hero />
+        <TrustBanner />
         <About />
         <Solutions />
+        <Process />
         <Portfolio />
         <Contact />
       </main>
