@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Brain, Cpu, Utensils, GraduationCap, MessageSquare, BarChart, ChevronRight, Menu, X, ExternalLink, Send, Smartphone, Mail } from 'lucide-react';
@@ -291,7 +290,9 @@ const Hero = () => {
             marginBottom: '40px',
             maxWidth: '600px'
           }}>
-            Automatizamos processos, otimizamos resultados e impulsionamos o futuro da sua empresa com tecnologia de ponta.
+            Automatizamos cardápios, atendimentos e rotinas educacionais com Inteligência Artificial.
+            Da hamburgueria de bairro ao professor em sala de aula, a RR Solutions IA transforma processos
+            manuais em experiências inteligentes.
           </p>
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
             <a href="https://wa.me/5511947077276?text=Olá,%20gostaria%20de%20saber%20mais%20sobre%20as%20soluções%20da%20RR%20Solutions%20IA." target="_blank" rel="noopener noreferrer" className="btn btn-primary">
@@ -317,10 +318,11 @@ const About = () => {
               NOSSA MISSÃO
             </h2>
             <p style={{ fontSize: '1.1rem', marginBottom: '1.5rem', color: THEME.textMuted }}>
-              Fundada em 2023, a <strong>RR Solutions IA</strong> nasceu com o propósito de democratizar o acesso à inteligência artificial. Acreditamos que a tecnologia deve ser uma ferramenta prática e acessível para empresas de todos os portes.
-            </p>
-            <p style={{ fontSize: '1.1rem', marginBottom: '1.5rem', color: THEME.textMuted }}>
-              Nosso estúdio tecnológico conta com um <strong>squad de desenvolvedores especializados</strong>, focados em criar soluções personalizadas que resolvem problemas reais do seu dia a dia.
+              Fundada em 2023, a <strong>RR Solutions IA</strong> nasceu com a missão de levar Inteligência
+              Artificial para a realidade de pequenos e médios negócios. Começamos desenvolvendo soluções para
+              hamburguerias e escolas, e hoje atuamos como um <strong>estúdio tecnológico</strong> com
+              <strong> squad de devs especializados em IA aplicada</strong>, criando produtos sob medida
+              que geram resultado de verdade.
             </p>
             <div style={{ 
               display: 'inline-block', 
@@ -549,10 +551,42 @@ const Portfolio = () => {
 };
 
 const Contact = () => {
-  const handleSubmit = (e: React.FormEvent) => {
+  const [phone, setPhone] = useState('');
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+    value = value.replace(/\D/g, ""); // Remove non-digits
+    value = value.substring(0, 11); // Limit to 11 digits
+
+    // Progressive masking: (DD) 9XXXX-XXXX
+    if (value.length > 10) {
+      value = value.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+    } else if (value.length > 6) {
+      value = value.replace(/^(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+    } else if (value.length > 2) {
+      value = value.replace(/^(\d{2})(\d{0,5})/, "($1) $2");
+    } else if (value.length > 0) {
+       value = value.replace(/^(\d*)/, "($1");
+    }
+    
+    setPhone(value);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert("Obrigado pelo interesse! Nossa equipe entrará em contato em breve.");
-    // In a real scenario, this would send data to a backend or form service.
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get('name');
+    const company = formData.get('company');
+    const phoneValue = formData.get('phone');
+    const segment = formData.get('segment');
+    const message = formData.get('message');
+
+    const whatsappMessage = `*Novo Lead via Site RR Solutions IA*%0A%0A*Nome:* ${name}%0A*Empresa:* ${company}%0A*WhatsApp:* ${phoneValue}%0A*Segmento:* ${segment}%0A*Mensagem:* ${message}`;
+
+    window.open(`https://wa.me/5511947077276?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
+    
+    e.currentTarget.reset();
+    setPhone(''); // Clear the controlled phone input state
   };
 
   return (
@@ -598,34 +632,43 @@ const Contact = () => {
           }}>
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div>
-                <label style={{ display: 'block', color: 'white', marginBottom: '8px', fontSize: '0.9rem' }}>Nome Completo</label>
-                <input type="text" required style={inputStyle} placeholder="Seu nome" />
+                <label htmlFor="name" style={{ display: 'block', color: 'white', marginBottom: '8px', fontSize: '0.9rem' }}>Nome Completo</label>
+                <input type="text" id="name" name="name" required style={inputStyle} placeholder="Seu nome" />
               </div>
               <div>
-                <label style={{ display: 'block', color: 'white', marginBottom: '8px', fontSize: '0.9rem' }}>Empresa</label>
-                <input type="text" style={inputStyle} placeholder="Nome da sua empresa" />
+                <label htmlFor="company" style={{ display: 'block', color: 'white', marginBottom: '8px', fontSize: '0.9rem' }}>Empresa</label>
+                <input type="text" id="company" name="company" style={inputStyle} placeholder="Nome da sua empresa" />
               </div>
               <div>
-                <label style={{ display: 'block', color: 'white', marginBottom: '8px', fontSize: '0.9rem' }}>WhatsApp</label>
-                <input type="tel" required style={inputStyle} placeholder="(DD) 90000-0000" />
+                <label htmlFor="phone" style={{ display: 'block', color: 'white', marginBottom: '8px', fontSize: '0.9rem' }}>WhatsApp</label>
+                <input 
+                  type="tel" 
+                  id="phone" 
+                  name="phone" 
+                  required 
+                  style={inputStyle} 
+                  placeholder="(11) 90000-0000" 
+                  value={phone}
+                  onChange={handlePhoneChange}
+                />
               </div>
               <div>
-                <label style={{ display: 'block', color: 'white', marginBottom: '8px', fontSize: '0.9rem' }}>Segmento do Negócio</label>
-                <select required style={inputStyle}>
+                <label htmlFor="segment" style={{ display: 'block', color: 'white', marginBottom: '8px', fontSize: '0.9rem' }}>Segmento do Negócio</label>
+                <select id="segment" name="segment" required style={inputStyle}>
                   <option value="">Selecione...</option>
-                  <option value="alimentacao">Alimentação / Restaurante</option>
-                  <option value="educacao">Educação</option>
-                  <option value="varejo">Varejo / E-commerce</option>
-                  <option value="servicos">Serviços</option>
-                  <option value="outro">Outro</option>
+                  <option value="Alimentação / Restaurante">Alimentação / Restaurante</option>
+                  <option value="Educação">Educação</option>
+                  <option value="Varejo / E-commerce">Varejo / E-commerce</option>
+                  <option value="Serviços">Serviços</option>
+                  <option value="Outro">Outro</option>
                 </select>
               </div>
               <div>
-                <label style={{ display: 'block', color: 'white', marginBottom: '8px', fontSize: '0.9rem' }}>Como a IA pode te ajudar?</label>
-                <textarea required style={{...inputStyle, minHeight: '100px', resize: 'vertical'}} placeholder="Descreva brevemente seu desafio..." ></textarea>
+                <label htmlFor="message" style={{ display: 'block', color: 'white', marginBottom: '8px', fontSize: '0.9rem' }}>Como a IA pode te ajudar?</label>
+                <textarea id="message" name="message" required style={{...inputStyle, minHeight: '100px', resize: 'vertical'}} placeholder="Descreva brevemente seu desafio..." ></textarea>
               </div>
               <button type="submit" className="btn btn-primary" style={{ justifyContent: 'center', width: '100%', marginTop: '10px' }}>
-                Enviar Solicitação <Send size={18} />
+                Enviar via WhatsApp <Send size={18} />
               </button>
             </form>
           </div>
