@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Brain, Cpu, Utensils, GraduationCap, MessageSquare, BarChart, ChevronRight, Menu, X, ExternalLink, Send, Smartphone, Mail, Code, Search, Rocket, Activity } from 'lucide-react';
+import { Brain, Utensils, GraduationCap, MessageSquare, ChevronRight, Menu, X, ExternalLink, Send, Smartphone, Mail, Code, Search, Rocket, Activity } from 'lucide-react';
 
 const THEME = {
   primary: '#00FF99',
@@ -30,6 +30,7 @@ const styles = `
     color: var(--text);
     overflow-x: hidden;
     line-height: 1.6;
+    width: 100%;
   }
   h1, h2, h3, h4, h5, h6, .font-orbitron {
     font-family: 'Orbitron', sans-serif;
@@ -56,6 +57,7 @@ const styles = `
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+    width: 100%;
   }
   section {
     padding: 80px 0;
@@ -70,7 +72,8 @@ const styles = `
   .flex-center { display: flex; align-items: center; justify-content: center; }
   .grid-responsive {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    /* Reduced min-width from 300px to 260px for better mobile fit */
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 2rem;
   }
   .btn {
@@ -135,6 +138,19 @@ const styles = `
     line-height: 1;
     margin-bottom: 1rem;
   }
+
+  /* Mobile adjustments */
+  @media (max-width: 480px) {
+    .container {
+      padding: 0 15px; /* Slightly less padding on very small screens to prevent cut-off */
+    }
+    h1.font-orbitron {
+      font-size: 2.5rem !important; /* Enforce readable title size on small screens */
+    }
+    section {
+      padding: 60px 0; /* Reduce section padding on mobile */
+    }
+  }
 `;
 
 // --- Components ---
@@ -187,16 +203,16 @@ const Navbar = () => {
       backgroundColor: scrolled ? 'rgba(10, 10, 15, 0.95)' : 'transparent',
       backdropFilter: scrolled ? 'blur(10px)' : 'none',
       borderBottom: scrolled ? `1px solid ${THEME.primary}33` : 'none',
-      padding: scrolled ? '15px 0' : '25px 0'
+      padding: scrolled ? '15px 0' : '20px 0'
     }}>
       <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <a 
           href="#hero" 
           onClick={(e) => handleNavClick(e, '#hero')}
-          style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}
+          style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px', zIndex: 1001 }}
         >
-          <Brain color={THEME.primary} size={32} />
-          <span className="font-orbitron neon-text" style={{ fontSize: '1.5rem', fontWeight: 700, color: 'white' }}>
+          <Brain color={THEME.primary} size={28} />
+          <span className="font-orbitron neon-text" style={{ fontSize: '1.3rem', fontWeight: 700, color: 'white' }}>
             RR SOLUTIONS<span style={{ color: THEME.primary }}>.IA</span>
           </span>
         </a>
@@ -220,8 +236,12 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Nav Toggle */}
-        <div className="mobile-toggle" style={{ display: window.innerWidth <= 960 ? 'block' : 'none' }}>
-          <button onClick={() => setIsOpen(!isOpen)} style={{ background: 'none', border: 'none', color: THEME.primary, cursor: 'pointer' }}>
+        <div className="mobile-toggle" style={{ display: window.innerWidth <= 960 ? 'block' : 'none', zIndex: 1001 }}>
+          <button 
+            onClick={() => setIsOpen(!isOpen)} 
+            style={{ background: 'none', border: 'none', color: THEME.primary, cursor: 'pointer', padding: '5px', display: 'flex' }}
+            aria-label="Menu"
+          >
             {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
@@ -231,18 +251,18 @@ const Navbar = () => {
       {isOpen && (
         <div style={{
           position: 'fixed',
-          top: '70px',
+          top: 0,
           left: 0,
           width: '100%',
-          height: 'calc(100vh - 70px)',
+          height: '100vh',
           backgroundColor: THEME.bgAlt,
-          padding: '20px 0',
+          padding: '80px 0 20px',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: '20px',
           overflowY: 'auto',
-          zIndex: 999
+          zIndex: 1000
         }}>
           {navLinks.map(link => (
             <a 
@@ -250,7 +270,7 @@ const Navbar = () => {
               href={link.href} 
               onClick={(e) => handleNavClick(e, link.href)}
               style={{ 
-                color: 'white', textDecoration: 'none', fontSize: '1.2rem', textTransform: 'uppercase', padding: '15px', width: '80%', textAlign: 'center', cursor: 'pointer', borderBottom: `1px solid ${THEME.primary}22`
+                color: 'white', textDecoration: 'none', fontSize: '1.3rem', textTransform: 'uppercase', padding: '15px', width: '80%', textAlign: 'center', cursor: 'pointer', borderBottom: `1px solid ${THEME.primary}22`, fontWeight: 700, fontFamily: 'Orbitron, sans-serif'
               }}
             >
               {link.name}
@@ -280,7 +300,8 @@ const Hero = () => {
       display: 'flex', 
       alignItems: 'center', 
       position: 'relative',
-      paddingTop: '120px',
+      paddingTop: '100px',
+      paddingBottom: '50px',
       overflow: 'hidden'
     }}>
       <div className="tech-grid"></div>
@@ -312,12 +333,12 @@ const Hero = () => {
           }}>
             Automatizamos processos, criamos experiências digitais e usamos IA para aumentar resultados em pequenos e médios negócios.
           </p>
-          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
             <a href="#contact" onClick={(e) => handleScrollTo(e, '#contact')} className="btn btn-primary">
-              Quero implementar IA no meu negócio <Rocket size={18} />
+              Quero implementar IA <Rocket size={18} style={{marginLeft: '8px'}} />
             </a>
             <a href="#portfolio" onClick={(e) => handleScrollTo(e, '#portfolio')} className="btn">
-              Ver projetos já entregues <ChevronRight size={18} />
+              Ver projetos <ChevronRight size={18} style={{marginLeft: '8px'}} />
             </a>
           </div>
         </div>
@@ -330,21 +351,23 @@ const TrustBanner = () => {
   return (
     <div style={{ 
       backgroundColor: THEME.primary, 
-      padding: '25px 0', 
+      padding: '30px 0', 
       position: 'relative',
       overflow: 'hidden'
     }}>
       <div className="container" style={{ textAlign: 'center' }}>
         <p style={{ 
           color: THEME.bg, 
-          fontSize: 'clamp(1rem, 2.5vw, 1.3rem)', 
-          fontWeight: 700,
-          fontFamily: 'Orbitron, sans-serif',
-          textTransform: 'uppercase',
-          letterSpacing: '1px',
-          margin: 0
+          fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)', 
+          fontWeight: 800,
+          fontFamily: 'Montserrat, sans-serif',
+          lineHeight: 1.4,
+          margin: 0,
+          maxWidth: '900px',
+          marginLeft: 'auto',
+          marginRight: 'auto'
         }}>
-          Aplicamos IA em restaurantes, hamburguerias e educação, com soluções sob medida para cada negócio.
+          "Impulsionamos negócios com Inteligência Artificial, criando soluções personalizadas para cada desafio."
         </p>
       </div>
     </div>
@@ -376,7 +399,7 @@ const About = () => {
              <div style={{
               position: 'relative',
               width: '100%',
-              maxWidth: '400px',
+              maxWidth: '350px',
               aspectRatio: '1/1',
               borderRadius: '20px',
               background: `linear-gradient(135deg, ${THEME.bgAlt}, ${THEME.bg})`,
@@ -384,10 +407,11 @@ const About = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              boxShadow: `0 20px 40px -20px rgba(0,255,153,0.2)`
             }}>
               <div className="tech-grid" style={{opacity: 0.5}}></div>
-              <Brain size={140} color={THEME.primary} style={{ opacity: 0.9, filter: 'drop-shadow(0 0 30px rgba(0,255,153,0.3))' }} />
+              <Brain size={120} color={THEME.primary} style={{ opacity: 0.9, filter: 'drop-shadow(0 0 30px rgba(0,255,153,0.3))' }} />
             </div>
           </div>
         </div>
@@ -528,6 +552,9 @@ const Portfolio = () => {
       category: "SaaS Educacional com IA",
       desc: "Plataforma que usa IA para criar/corrigir avaliações e gerar materiais didáticos.",
       url: "https://avaliapro.app/",
+      // TODO: Substitua a URL abaixo pela URL real do logotipo que você hospedou.
+      customImage: "https://placehold.co/600x400/111116/00FF99?text=LOGO+AVALIAPRO", 
+      isLogo: true
     },
     {
       title: "ClickInBurguer",
@@ -569,75 +596,94 @@ const Portfolio = () => {
 
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', 
+          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
           gap: '30px' 
         }}>
-          {projects.map((project, index) => (
-            <a key={index} href={project.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-              <div className="neon-box portfolio-card" style={{
-                backgroundColor: THEME.bgAlt,
-                borderRadius: '16px',
-                overflow: 'hidden',
-                height: '100%',
-                border: `1px solid ${THEME.primary}22`,
-                display: 'flex',
-                flexDirection: 'column'
-              }}>
-                <div style={{
-                  height: '220px',
-                  position: 'relative',
+          {projects.map((project, index) => {
+            // Determine if we use a custom image (logo) or the website screenshot
+            const imageUrl = project.customImage || `https://image.thum.io/get/width/800/crop/600/noanimate/${project.url}`;
+            
+            // Specific styles for logos vs screenshots
+            const imageStyle = project.isLogo ? {
+              width: '80%',
+              height: '80%',
+              objectFit: 'contain' as const,
+              objectPosition: 'center'
+            } : {
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover' as const,
+              objectPosition: 'top center'
+            };
+
+            return (
+              <a key={index} href={project.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                <div className="neon-box portfolio-card" style={{
+                  backgroundColor: THEME.bgAlt,
+                  borderRadius: '16px',
                   overflow: 'hidden',
-                  backgroundColor: THEME.bg // Placeholder
+                  height: '100%',
+                  border: `1px solid ${THEME.primary}22`,
+                  display: 'flex',
+                  flexDirection: 'column'
                 }}>
-                  <img 
-                    src={`https://image.thum.io/get/width/800/crop/600/noanimate/${project.url}`}
-                    alt={`Miniatura do site ${project.title}`}
-                    loading="lazy"
-                    className="portfolio-img"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      objectPosition: 'top center',
-                      transition: 'transform 0.5s ease, opacity 0.5s ease',
-                      opacity: 0.85
-                    }}
-                  />
-                   <div style={{ 
-                     position: 'absolute', 
-                     top: '15px', 
-                     right: '15px', 
-                     background: 'rgba(0,0,0,0.7)', 
-                     padding: '6px 12px', 
-                     borderRadius: '20px', 
-                     fontSize: '0.75rem', 
-                     color: 'white', 
-                     display: 'flex', 
-                     alignItems: 'center', 
-                     gap: '6px',
-                     backdropFilter: 'blur(4px)',
-                     border: `1px solid ${THEME.primary}44`,
-                     textTransform: 'uppercase',
-                     fontWeight: 700
-                   }}>
-                     <ExternalLink size={12} color={THEME.primary} /> Ver projeto
-                   </div>
+                  <div style={{
+                    height: '220px',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    backgroundColor: THEME.bg,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: project.isLogo ? '20px' : '0'
+                  }}>
+                    <img 
+                      src={imageUrl}
+                      alt={`Projeto ${project.title}`}
+                      loading="lazy"
+                      className="portfolio-img"
+                      style={{
+                        ...imageStyle,
+                        transition: 'transform 0.5s ease, opacity 0.5s ease',
+                        opacity: project.isLogo ? 1 : 0.85
+                      }}
+                    />
+                     <div style={{ 
+                       position: 'absolute', 
+                       top: '15px', 
+                       right: '15px', 
+                       background: 'rgba(0,0,0,0.7)', 
+                       padding: '6px 12px', 
+                       borderRadius: '20px', 
+                       fontSize: '0.75rem', 
+                       color: 'white', 
+                       display: 'flex', 
+                       alignItems: 'center', 
+                       gap: '6px',
+                       backdropFilter: 'blur(4px)',
+                       border: `1px solid ${THEME.primary}44`,
+                       textTransform: 'uppercase',
+                       fontWeight: 700
+                     }}>
+                       <ExternalLink size={12} color={THEME.primary} /> Ver projeto
+                     </div>
+                  </div>
+                  
+                  <div style={{ padding: '25px', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                    <span style={{ color: THEME.primary, fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>
+                      {project.category}
+                    </span>
+                    <h3 className="font-orbitron" style={{ color: 'white', marginBottom: '10px', fontSize: '1.3rem' }}>
+                      {project.title}
+                    </h3>
+                    <p style={{ color: THEME.textMuted, fontSize: '0.95rem' }}>
+                      {project.desc}
+                    </p>
+                  </div>
                 </div>
-                
-                <div style={{ padding: '25px', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                  <span style={{ color: THEME.primary, fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>
-                    {project.category}
-                  </span>
-                  <h3 className="font-orbitron" style={{ color: 'white', marginBottom: '10px', fontSize: '1.3rem' }}>
-                    {project.title}
-                  </h3>
-                  <p style={{ color: THEME.textMuted, fontSize: '0.95rem' }}>
-                    {project.desc}
-                  </p>
-                </div>
-              </div>
-            </a>
-          ))}
+              </a>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -653,7 +699,6 @@ const Contact = () => {
     const segment = formData.get('segment');
     const message = formData.get('message');
 
-    // Formatado para melhor leitura no WhatsApp
     const whatsappMessage = 
 `*Novo Contato via Site RR Solutions IA* 🚀
 
@@ -709,7 +754,7 @@ ${message}`;
 
           <div style={{ 
             backgroundColor: THEME.bg, 
-            padding: '40px', 
+            padding: '30px', 
             borderRadius: '20px', 
             border: `1px solid ${THEME.primary}33`,
             boxShadow: `0 20px 40px -10px rgba(0,0,0,0.5)`
@@ -745,7 +790,7 @@ ${message}`;
                 ></textarea>
               </div>
               <button type="submit" className="btn btn-primary" style={{ justifyContent: 'center', width: '100%', marginTop: '10px', fontSize: '1rem', padding: '15px' }}>
-                Solicitar avaliação gratuita <Send size={18} />
+                Solicitar avaliação <Send size={18} />
               </button>
             </form>
           </div>
