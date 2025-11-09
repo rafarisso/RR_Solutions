@@ -552,9 +552,6 @@ const Portfolio = () => {
       category: "SaaS Educacional com IA",
       desc: "Plataforma que usa IA para criar/corrigir avaliações e gerar materiais didáticos.",
       url: "https://avaliapro.app/",
-      // Using the raw GitHub URL for the image since it's hosted in the user's public repo
-      customImage: "https://raw.githubusercontent.com/rafarisso/rrsolutions/main/AvaliaPro_logo.png",
-      isLogo: true
     },
     {
       title: "ClickInBurguer",
@@ -601,9 +598,11 @@ const Portfolio = () => {
         }}>
           {projects.map((project, index) => {
             // Determine if we use a custom image (logo) or the website screenshot
+            // @ts-ignore
             const imageUrl = project.customImage || `https://image.thum.io/get/width/800/crop/600/noanimate/${project.url}`;
             
             // Specific styles for logos vs screenshots
+            // @ts-ignore
             const imageStyle = project.isLogo ? {
               width: '100%',
               height: '100%',
@@ -635,6 +634,7 @@ const Portfolio = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    // @ts-ignore
                     padding: project.isLogo ? '8px' : '0'
                   }}>
                     <img 
@@ -645,6 +645,7 @@ const Portfolio = () => {
                       style={{
                         ...imageStyle,
                         transition: 'transform 0.5s ease, opacity 0.5s ease',
+                        // @ts-ignore
                         opacity: project.isLogo ? 1 : 0.85
                       }}
                     />
