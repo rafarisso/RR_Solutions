@@ -552,8 +552,8 @@ const Portfolio = () => {
       category: "SaaS Educacional com IA",
       desc: "Plataforma que usa IA para criar/corrigir avaliações e gerar materiais didáticos.",
       url: "https://avaliapro.app/",
-      // TODO: Substitua a URL abaixo pela URL real do logotipo que você hospedou.
-      customImage: "https://placehold.co/600x400/111116/00FF99?text=LOGO+AVALIAPRO", 
+      // Using the raw GitHub URL for the image since it's hosted in the user's public repo
+      customImage: "https://raw.githubusercontent.com/rafarisso/rrsolutions/main/AvaliaPro_logo.png",
       isLogo: true
     },
     {
@@ -605,8 +605,8 @@ const Portfolio = () => {
             
             // Specific styles for logos vs screenshots
             const imageStyle = project.isLogo ? {
-              width: '80%',
-              height: '80%',
+              width: '100%',
+              height: '100%',
               objectFit: 'contain' as const,
               objectPosition: 'center'
             } : {
@@ -635,7 +635,7 @@ const Portfolio = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: project.isLogo ? '20px' : '0'
+                    padding: project.isLogo ? '8px' : '0'
                   }}>
                     <img 
                       src={imageUrl}
