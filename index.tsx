@@ -367,7 +367,7 @@ const TrustBanner = () => {
           marginLeft: 'auto',
           marginRight: 'auto'
         }}>
-          "Impulsionamos negócios com Inteligência Artificial, criando soluções personalizadas para cada desafio."
+          Impulsionamos negócios com Inteligência Artificial, criando soluções personalizadas para cada desafio
         </p>
       </div>
     </div>
@@ -380,7 +380,7 @@ const About = () => {
       <div className="container">
         <div className="grid-responsive" style={{ alignItems: 'center', gap: '4rem' }}>
           <div>
-            <h2 className="font-orbitron neon-text" style={{ fontSize: '2.5rem', marginBottom: '1.5rem', color: 'white' }}>
+            <h2 className="font-orbitron neon-text" style={{ fontSize: 'clamp(1.8rem, 5vw, 2.5rem)', marginBottom: '1.5rem', color: 'white' }}>
               SOBRE A <span style={{ color: THEME.primary }}>RR SOLUTIONS IA</span>
             </h2>
             <div style={{ color: THEME.textMuted, fontSize: '1.1rem', display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -448,7 +448,7 @@ const Solutions = () => {
     <section id="solutions">
       <div className="container">
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-          <h2 className="font-orbitron" style={{ fontSize: '2.5rem', color: 'white', marginBottom: '10px' }}>
+          <h2 className="font-orbitron" style={{ fontSize: 'clamp(1.8rem, 5vw, 2.5rem)', color: 'white', marginBottom: '10px' }}>
             SOLUÇÕES EM <span className="neon-text" style={{ color: THEME.primary }}>IA</span>
           </h2>
           <p style={{ color: THEME.textMuted, fontSize: '1.2rem' }}>Tecnologia que resolve problemas reais.</p>
@@ -515,7 +515,7 @@ const Process = () => {
       <div className="tech-grid" style={{ opacity: 0.1 }}></div>
       <div className="container" style={{ position: 'relative', zIndex: 2 }}>
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-          <h2 className="font-orbitron" style={{ fontSize: '2.5rem', color: 'white', marginBottom: '10px' }}>
+          <h2 className="font-orbitron" style={{ fontSize: 'clamp(1.8rem, 5vw, 2.5rem)', color: 'white', marginBottom: '10px' }}>
             COMO <span className="neon-text" style={{ color: THEME.primary }}>TRABALHAMOS</span>
           </h2>
           <p style={{ color: THEME.textMuted, fontSize: '1.2rem' }}>Do entendimento à evolução contínua.</p>
@@ -586,7 +586,7 @@ const Portfolio = () => {
     <section id="portfolio">
       <div className="container">
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-          <h2 className="font-orbitron neon-text" style={{ fontSize: '2.5rem', color: 'white', marginBottom: '15px' }}>
+          <h2 className="font-orbitron neon-text" style={{ fontSize: 'clamp(1.8rem, 5vw, 2.5rem)', color: 'white', marginBottom: '15px' }}>
             NOSSO PORTFÓLIO
           </h2>
           <p style={{ color: THEME.textMuted, fontSize: '1.2rem', maxWidth: '700px', margin: '0 auto' }}>
@@ -709,7 +709,7 @@ const Contact = () => {
 📝 *Mensagem / Desafio:*
 ${message}`;
 
-    window.open(`https://wa.me/5511947077276?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
+    window.open(`https://wa.me/5511910950968?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
     e.currentTarget.reset();
   };
 
@@ -719,7 +719,7 @@ ${message}`;
       <div className="container" style={{ position: 'relative', zIndex: 2 }}>
         <div className="grid-responsive" style={{ gap: '4rem', alignItems: 'center' }}>
           <div>
-            <h2 className="font-orbitron" style={{ fontSize: '2.5rem', color: 'white', marginBottom: '20px' }}>
+            <h2 className="font-orbitron" style={{ fontSize: 'clamp(2rem, 5vw, 2.5rem)', color: 'white', marginBottom: '20px' }}>
               COMO A IA PODE AJUDAR O <span className="neon-text" style={{ color: THEME.primary }}>SEU NEGÓCIO</span> HOJE?
             </h2>
             <p style={{ fontSize: '1.2rem', color: THEME.textMuted, marginBottom: '30px' }}>
@@ -733,8 +733,8 @@ ${message}`;
                 </div>
                 <div>
                   <p style={{ color: THEME.textMuted, fontSize: '0.9rem', marginBottom: '5px' }}>WhatsApp / Telefone</p>
-                  <a href="https://wa.me/5511947077276" target="_blank" rel="noopener noreferrer" style={{ color: 'white', fontSize: '1.2rem', fontWeight: 500, textDecoration: 'none' }}>
-                    (11) 9 4707-7276
+                  <a href="https://wa.me/5511910950968" target="_blank" rel="noopener noreferrer" style={{ color: 'white', fontSize: '1.2rem', fontWeight: 500, textDecoration: 'none' }}>
+                    (11) 9 1095-0968
                   </a>
                 </div>
               </div>
@@ -744,8 +744,8 @@ ${message}`;
                 </div>
                 <div>
                   <p style={{ color: THEME.textMuted, fontSize: '0.9rem', marginBottom: '5px' }}>E-mail</p>
-                  <a href="mailto:risso_rafa@hotmail.com" style={{ color: 'white', fontSize: '1.2rem', fontWeight: 500, textDecoration: 'none' }}>
-                    risso_rafa@hotmail.com
+                  <a href="mailto:contato@rrsolutions.app" style={{ color: 'white', fontSize: '1.2rem', fontWeight: 500, textDecoration: 'none' }}>
+                    contato@rrsolutions.app
                   </a>
                 </div>
               </div>
