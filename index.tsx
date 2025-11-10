@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Brain, Utensils, GraduationCap, MessageSquare, ChevronRight, Menu, X, ExternalLink, Send, Smartphone, Mail, Code, Search, Rocket, Activity } from 'lucide-react';
@@ -547,6 +548,12 @@ const Process = () => {
 
 const Portfolio = () => {
   const projects = [
+    {
+      title: "Infinity Company",
+      category: "E-commerce / Varejo",
+      desc: "Loja online com sistema de pagamentos integrado (Stripe) e design focado em conversão.",
+      url: "https://infinitycompanybr.netlify.app/",
+    },
     {
       title: "AvaliaPro",
       category: "SaaS Educacional com IA",
