@@ -1,8 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Brain, Utensils, GraduationCap, MessageSquare, ChevronRight, Menu, X, ExternalLink, Send, Smartphone, Mail, Code, Search, Rocket, Activity, Sparkles, Wand2 } from 'lucide-react';
-import { GoogleGenAI } from "@google/genai";
+import { Brain, Utensils, GraduationCap, MessageSquare, ChevronRight, Menu, X, ExternalLink, Send, Smartphone, Mail, Code, Search, Rocket, Activity, Sparkles } from 'lucide-react';
 
 const THEME = {
   primary: '#00FF99',
@@ -144,80 +143,6 @@ const styles = `
     margin-bottom: 1rem;
   }
   
-  /* AI Demo Section */
-  #ai-demo textarea, #ai-demo .result-box {
-    width: 100%;
-    padding: 16px;
-    background-color: var(--bg-alt);
-    border: 1px solid ${THEME.primary}44;
-    border-radius: 8px;
-    color: var(--text);
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
-    outline: none;
-    transition: all 0.3s ease;
-    resize: vertical;
-  }
-  #ai-demo textarea {
-    min-height: 120px;
-  }
-  #ai-demo textarea:focus, #ai-demo .result-box:focus-within {
-    border-color: var(--primary);
-    box-shadow: 0 0 10px rgba(0, 255, 153, 0.3);
-  }
-  #ai-demo .result-box {
-    min-height: 150px;
-    margin-top: 20px;
-    white-space: pre-wrap;
-    line-height: 1.7;
-    word-wrap: break-word;
-  }
-  #ai-demo .result-box strong { color: var(--primary); font-weight: 600; }
-  #ai-demo .result-box em { font-style: italic; color: #00FF99dd; }
-
-  #ai-demo .example-prompts {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 25px;
-    margin-bottom: 15px;
-  }
-  #ai-demo .example-prompt {
-    background: transparent;
-    border: 1px solid ${THEME.primary}44;
-    color: ${THEME.textMuted};
-    padding: 8px 15px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 0.85rem;
-  }
-  #ai-demo .example-prompt:hover {
-    background: ${THEME.primary}22;
-    color: var(--primary);
-    border-color: var(--primary);
-    transform: translateY(-2px);
-  }
-  .loading-spinner {
-    width: 32px;
-    height: 32px;
-    border: 4px solid ${THEME.primary}44;
-    border-top-color: var(--primary);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 40px auto;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .error-message {
-    color: #ff6b6b;
-    background-color: #ff6b6b1a;
-    border: 1px solid #ff6b6b;
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-    margin-top: 20px;
-  }
-
   /* Mobile adjustments */
   @media (max-width: 480px) {
     .container {
@@ -250,7 +175,6 @@ const Navbar = () => {
     { name: 'Soluções', href: '#solutions' },
     { name: 'Processo', href: '#process' },
     { name: 'Portfólio', href: '#portfolio' },
-    { name: 'Demo IA', href: '#ai-demo' },
     { name: 'Contato', href: '#contact' },
   ];
 
@@ -771,95 +695,6 @@ const Portfolio = () => {
   );
 };
 
-const AIDemo = () => {
-  const [prompt, setPrompt] = useState('');
-  const [result, setResult] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const examplePrompts = [
-    'Crie 3 nomes para uma hamburgueria gourmet',
-    'Escreva um post para Instagram sobre IA na educação',
-    'Gere uma ideia de app para automatizar um restaurante',
-  ];
-
-  const handleGenerate = async () => {
-    if (!prompt || loading) return;
-    setLoading(true);
-    setError('');
-    setResult('');
-
-    try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-        config: {
-          systemInstruction: "Você é um assistente de IA criativo e especialista em negócios. Suas respostas devem ser úteis, diretas e prontas para serem aplicadas em um contexto empresarial.",
-        }
-      });
-      setResult(response.text);
-    } catch (e) {
-      console.error(e);
-      setError('Ocorreu um erro ao conectar com a IA. Por favor, tente novamente.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const parseMarkdownToHTML = (markdown) => {
-    if (!markdown) return '';
-    const escapeHtml = (unsafe) => unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-    let html = escapeHtml(markdown);
-    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    return html;
-  };
-
-  return (
-    <section id="ai-demo" style={{ backgroundColor: THEME.bgAlt, position: 'relative' }}>
-        <div className="tech-grid" style={{ opacity: 0.1 }}></div>
-        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-            <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
-                <h2 className="font-orbitron" style={{ fontSize: 'clamp(1.8rem, 5vw, 2.5rem)', color: 'white', marginBottom: '10px' }}>
-                    EXPERIMENTE NOSSA <span className="neon-text" style={{ color: THEME.primary }}>IA</span>
-                </h2>
-                <p style={{ color: THEME.textMuted, fontSize: '1.2rem', marginBottom: '40px' }}>
-                    Diga o que você precisa e nossa IA criará para você.
-                </p>
-
-                <textarea
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="Ex: Crie um slogan para uma cafeteria com tema de tecnologia..."
-                    disabled={loading}
-                />
-                
-                <div className="example-prompts">
-                  <span style={{color: THEME.textMuted, fontSize: '0.9rem', alignSelf: 'center'}}>Sugestões:</span>
-                  {examplePrompts.map((p, i) => (
-                    <button key={i} className="example-prompt" onClick={() => setPrompt(p)} disabled={loading}>
-                      {p}
-                    </button>
-                  ))}
-                </div>
-
-                <button onClick={handleGenerate} disabled={!prompt || loading} className="btn btn-primary" style={{ width: '100%', maxWidth: '300px', marginTop: '20px', padding: '15px' }}>
-                    {loading ? 'Gerando...' : 'Gerar com IA'}
-                    {loading ? null : <Wand2 size={18} style={{marginLeft: '8px'}} />}
-                </button>
-
-                <div className="result-box">
-                    {loading && <div className="loading-spinner"></div>}
-                    {error && <p className="error-message">{error}</p>}
-                    {result && <div dangerouslySetInnerHTML={{ __html: parseMarkdownToHTML(result) }}></div>}
-                </div>
-            </div>
-        </div>
-    </section>
-  );
-};
-
 const Contact = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -1036,7 +871,6 @@ const App = () => {
         <Solutions />
         <Process />
         <Portfolio />
-        <AIDemo />
         <Contact />
       </main>
       <Footer />
