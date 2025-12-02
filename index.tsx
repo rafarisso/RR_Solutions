@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Brain, Utensils, GraduationCap, MessageSquare, ChevronRight, Menu, X, ExternalLink, Send, Smartphone, Mail, Code, Search, Rocket, Activity, Sparkles } from 'lucide-react';
+import { Brain, Utensils, GraduationCap, MessageSquare, ChevronRight, Menu, X, ExternalLink, Send, Smartphone, Mail, Code, Search, Rocket, Activity, Sparkles, Palette, Layout, Zap } from 'lucide-react';
 
 const THEME = {
   primary: '#00FF99',
@@ -9,7 +9,7 @@ const THEME = {
   bg: '#0a0a0f',
   bgAlt: '#111116',
   text: '#e0e0e0',
-  textMuted: '#a0a0a0',
+  textMuted: '#a0a0e0',
 };
 
 // --- CSS Styles ---
@@ -424,6 +424,52 @@ const About = () => {
   );
 };
 
+const Technologies = () => {
+  const techs = [
+    { name: "HTML5", icon: <Layout size={40} />, desc: "Estrutura Semântica" },
+    { name: "CSS3", icon: <Palette size={40} />, desc: "Estilo Moderno" },
+    { name: "JavaScript", icon: <Code size={40} />, desc: "Interatividade" }
+  ];
+
+  return (
+    <section style={{ backgroundColor: THEME.bg, borderTop: `1px solid ${THEME.primary}22`, borderBottom: `1px solid ${THEME.primary}22` }}>
+      <div className="container">
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <h2 className="font-orbitron" style={{ fontSize: '1.8rem', color: 'white' }}>
+            TECNOLOGIAS <span className="neon-text" style={{ color: THEME.primary }}>UTILIZADAS</span>
+          </h2>
+          <p style={{ color: THEME.textMuted }}>Desenvolvimento robusto e otimizado</p>
+        </div>
+        
+        <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '30px' }}>
+          {techs.map((tech, index) => (
+            <div key={index} className="neon-box" style={{
+              width: '200px',
+              padding: '25px',
+              backgroundColor: THEME.bgAlt,
+              borderRadius: '12px',
+              border: `1px solid ${THEME.primary}22`,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              gap: '15px'
+            }}>
+              <div style={{ color: THEME.primary }}>
+                {tech.icon}
+              </div>
+              <div>
+                <h3 className="font-orbitron" style={{ color: 'white', fontSize: '1.2rem' }}>{tech.name}</h3>
+                <span style={{ fontSize: '0.85rem', color: THEME.textMuted }}>{tech.desc}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const Solutions = () => {
   const solutionsData = [
     {
@@ -552,6 +598,18 @@ const Process = () => {
 const Portfolio = () => {
   const projects = [
     {
+      title: "Dantas Imports",
+      category: "E-commerce / Varejo",
+      desc: "E-commerce de produtos importados com vitrine moderna e experiência de usuário otimizada.",
+      url: "https://dantasimports.netlify.app/",
+    },
+    {
+      title: "Dani Tarot Terapêutico",
+      category: "Serviços / Bem-estar",
+      desc: "Landing page imersiva para serviços de tarot e terapia, com design personalizado e foco em conversão.",
+      url: "https://danitarotterapeutico.netlify.app/",
+    },
+    {
       title: "BarbAI",
       category: "Serviços / Agendamento com IA",
       desc: "Site de agendamento de barbearia com IA integrada que sugere horários de acordo com a agenda do cliente.",
@@ -613,7 +671,8 @@ const Portfolio = () => {
           gap: '30px' 
         }}>
           {projects.map((project, index) => {
-            const imageUrl = `https://image.thum.io/get/width/800/crop/600/noanimate/${project.url}`;
+            // Usando mshots do WordPress que é mais estável, com fallback para thum.io
+            const imageUrl = `https://s0.wp.com/mshots/v1/${encodeURIComponent(project.url)}?w=800&h=600`;
             
             const imageStyle = {
               width: '100%',
@@ -651,6 +710,19 @@ const Portfolio = () => {
                         ...imageStyle,
                         transition: 'transform 0.5s ease, opacity 0.5s ease',
                         opacity: 0.85
+                      }}
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (target.src.includes('s0.wp.com')) {
+                           // Tenta o thum.io se o mshots falhar
+                           target.src = `https://image.thum.io/get/width/800/crop/600/noanimate/${project.url}`;
+                        } else {
+                           // Se ambos falharem, mostra placeholder
+                           target.style.display = 'none';
+                           if (target.parentElement) {
+                             target.parentElement.innerHTML = '<div style="color: #00FF99; text-align: center; padding: 20px;">Imagem indisponível<br/><small style="color: #a0a0e0">Visite o site para ver</small></div>';
+                           }
+                        }
                       }}
                     />
                      <div style={{ 
@@ -761,7 +833,7 @@ ${message}`;
             backgroundColor: THEME.bgAlt, 
             padding: '30px', 
             borderRadius: '20px', 
-            border: `1px solid ${THEME.primary}33`,
+            border: `1px solid ${THEME.primary}33`, 
             boxShadow: `0 20px 40px -10px rgba(0,0,0,0.5)`
           }}>
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -869,6 +941,7 @@ const App = () => {
         <TrustBanner />
         <About />
         <Solutions />
+        <Technologies />
         <Process />
         <Portfolio />
         <Contact />
